@@ -27,4 +27,4 @@ dependencies:
     repository: "oci://registry-1.docker.io/bitnamicharts"
     alias: postgres
     condition: postgres.enabled
-    version: 12.8.2
+    version: 12.12.10
