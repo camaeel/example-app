@@ -3,6 +3,7 @@ on:
     paths:
       - "charts/**"
     branches:
+      - 'master'
       - 'main'
 
 name: Release
