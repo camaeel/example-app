@@ -77,7 +77,27 @@ func Create(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "ok",
-	})
+	value, exists := c.Get("db")
+	if !exists {
+		c.Abort()
+	}
+	db := value.(*sql.DB)
+
+	id := c.Params.ByName("id")
+
+	note := notes.Note{}
+
+	if err := c.ShouldBindJSON(&note); err != nil {
+		c.AbortWithError(503, err)
+		return
+	}
+
+	err := notes.Update(db, id, note)
+
+	if err != nil {
+		c.AbortWithError(503, err)
+		return
+	}
+	c.JSON(200, gin.H{"result": "ok"})
+
 }

@@ -8,6 +8,7 @@ on:
       - 'docs/**'
       - 'example/**'
       - '/*.md'
+      - 'tests.rest'
     branches:
       - '*'
   pull_request:
@@ -16,6 +17,7 @@ on:
       - 'example/**'
       - 'docs/**'
       - '/*.md'
+      - 'tests.rest'
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io

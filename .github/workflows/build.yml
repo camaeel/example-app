@@ -5,6 +5,7 @@ on:
       - 'example/**'
       - 'docs/**'
       - '/*.md'
+      - 'tests.rest'
     branches:
       - '*'
   pull_request:
@@ -13,6 +14,7 @@ on:
       - 'charts/**'
       - 'docs/**'
       - '/*.md'
+      - 'tests.rest'
   workflow_call:
 
 name: Build and test

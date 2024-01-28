@@ -2,7 +2,6 @@ package notes
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 )
 
@@ -57,6 +56,7 @@ func Create(db *sql.DB, note Note) error {
 	return err
 }
 
-func Update(db *sql.DB, note Note) error {
-	return fmt.Errorf("not implemented yet")
+func Update(db *sql.DB, id string, note Note) error {
+	_, err := db.Exec("UPDATE notes SET title = $1, content = $2 WHERE id = $3", note.Title, note.Content, id)
+	return err
 }
