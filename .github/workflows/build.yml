@@ -52,7 +52,7 @@ jobs:
           go generate ./...
           go test ./...
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
           name: release-binaries
