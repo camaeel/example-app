@@ -55,6 +55,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
-          name: release-binaries-{{  matrix.os }}-{{ matrix.architecture }}
+          name: "release-binaries-{{  matrix.os }}-{{ matrix.architecture }}"
           path: bin/app-*
           if-no-files-found: error
