@@ -17,8 +17,9 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: release-binaries
+          pattern: release-binaries
           path: bin
+          merge-multiple: true
       - name: debug list files
         run: find .
       - name: Release
