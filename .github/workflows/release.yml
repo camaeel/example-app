@@ -6,13 +6,13 @@ on:
 name: Release
 jobs:
   docker-build:
+    permissions:
+      packages: write
+      id-token: write
     uses: ./.github/workflows/docker.yml
   build-and-test:
     uses: ./.github/workflows/build.yml
   create-release:
-    permissions:
-      packages: write
-      id-token: write
     needs:
       - docker-build
       - build-and-test

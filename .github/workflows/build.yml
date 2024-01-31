@@ -20,8 +20,6 @@ on:
 name: Build and test
 jobs:
   build-bianries:
-    permissions:
-      packages: write
     strategy:
       matrix:
         architecture: [amd64, arm64]
