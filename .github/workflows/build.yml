@@ -19,7 +19,7 @@ on:
 
 name: Build and test
 jobs:
-  build:
+  build-bianries:
     permissions:
       packages: write
     strategy:
