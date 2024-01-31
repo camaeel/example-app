@@ -114,7 +114,7 @@ env:
         key: DATABASE_URL
 
 # enables integrated postgres from bitnami chart
-postgres:
+bitnamipostgres:
   enabled: true
   auth:
     existingSecret: "postgres-credentials"

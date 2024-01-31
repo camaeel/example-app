@@ -14,3 +14,6 @@ build:
 
 docker:
 	docker buildx build -t example-app:local .
+
+helm-install:
+	helm upgrade --install -n example-app example-app charts/example-app --create-namespace

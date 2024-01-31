@@ -25,7 +25,7 @@ appVersion: "0.1.0"
 dependencies:
   - name: postgresql
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    alias: postgres
-    condition: postgres.enabled
-    version: 12.12.10
+    alias: bitnamipostgres
+    condition: bitnamipostgres.enabled
+    version: 13.4.3
 
