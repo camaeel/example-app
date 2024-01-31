@@ -16,4 +16,6 @@ docker:
 	docker buildx build -t example-app:local .
 
 helm-install:
-	helm upgrade --install -n example-app example-app charts/example-app --create-namespace
+	helm upgrade --install -n example-app example-app charts/example-app --create-namespace \
+		--set cnpgdb.enabled=true \
+		--set cnpgdb.storage.storageClass=proxmox-data-ephemeral

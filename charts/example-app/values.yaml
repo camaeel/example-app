@@ -28,10 +28,13 @@ serviceAccount:
 podAnnotations: {}
 podLabels: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
   # fsGroup: 2000
 
 securityContext:
+  allowPrivilegeEscalation: false
   capabilities:
     drop:
     - ALL
@@ -107,18 +110,32 @@ tolerations: []
 affinity: {}
 
 env:
+  # uncomment for bitnamidatabase
+#  - name: DATABASE_URL
+#    valueFrom:
+#      secretKeyRef:
+#        name: "postgres-credentials"
+#        key: DATABASE_URL
+  # uncomment for cnpg db
   - name: DATABASE_URL
     valueFrom:
       secretKeyRef:
-        name: "postgres-credentials"
-        key: DATABASE_URL
+        name: example-app-cnpgdb-app
+        key: uri
 
 # enables integrated postgres from bitnami chart
 bitnamipostgres:
-  enabled: true
+  enabled: false
   auth:
     existingSecret: "postgres-credentials"
     username: example-app
     database: example
 
   sslmode: disable
+
+# enable db managed by cloud native PG operator
+cnpgdb:
+  enabled: false
+  storage:
+    size: 1Gi
+
