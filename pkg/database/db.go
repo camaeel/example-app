@@ -14,6 +14,11 @@ func SetupDriver() (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if u.Scheme == "postgresql" {
+		u.Scheme = "postgres"
+	}
+
 	// connStr := "postgres://pqgotest:password@localhost/pqgotest?sslmode=verify-full"
 	db, err := sql.Open(u.Scheme, connStr)
 	return db, err
