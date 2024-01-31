@@ -8,10 +8,11 @@ jobs:
   docker-build:
     uses: ./.github/workflows/docker.yml
   build-and-test:
-    uses: ./.github/workflows/build.yml
-  create-release:
     permissions:
       packages: write
+      id-token: write
+    uses: ./.github/workflows/build.yml
+  create-release:
     needs:
       - docker-build
       - build-and-test
