@@ -138,4 +138,3 @@ cnpgdb:
   enabled: false
   storage:
     size: 1Gi
-
