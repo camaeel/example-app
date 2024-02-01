@@ -1,9 +1,9 @@
 dependencies:
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.4.3
+  version: 13.4.4
 - name: cnpgdb
   repository: https://camaeel.github.io/helm-charts/
   version: 0.1.0
-digest: sha256:eef82699c76c61993ee4e046b091bb753690f0abc0730d2bf1a47bc64456c155
-generated: "2024-01-31T23:40:31.834661+01:00"
+digest: sha256:931abfba6df09c3faa39ae8a18a37060810f5317933eb90e2f402eef74ca7ff9
+generated: "2024-02-01T11:02:20.625092645Z"
