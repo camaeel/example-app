@@ -1,12 +1,12 @@
-FROM --platform=$BUILDPLATFORM golang:1.21-alpine AS builder
+FROM --platform=$BUILDPLATFORM alpine AS certs
 
 # Install our build tools
 RUN apk add --update ca-certificates
 RUN echo "nonroot:x:1337:1337:nonroot:/nonroot:/usr/sbin/nologin" > /etc_passwd
 
 FROM --platform=$BUILDPLATFORM scratch
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /etc_passwd /etc/passwd
+COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=certs /etc_passwd /etc/passwd
 
 USER nonroot
 
