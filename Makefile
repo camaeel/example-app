@@ -19,3 +19,6 @@ helm-install:
 	helm upgrade --install -n example-app example-app charts/example-app --create-namespace \
 		--set cnpgdb.enabled=true \
 		--set cnpgdb.storage.storageClass=proxmox-data-ephemeral
+
+goreleaser:
+	goreleaser release  --clean --auto-snapshot
