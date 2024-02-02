@@ -90,6 +90,9 @@ changelog:
 
 release:
   prerelease: auto
+  footer: |
+    ## Docker Images
+    - `{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}`
 
 snapshot:
   name_template: '{{ if index .Env "SNAPSHOT_VERSION" }}{{ .Env.SNAPSHOT_VERSION }}{{ else }}{{ incpatch .Version }}-devel{{ end }}'
