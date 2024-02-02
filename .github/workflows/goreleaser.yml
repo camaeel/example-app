@@ -20,11 +20,6 @@ on:
 name: Build and test
 jobs:
   build-bianries:
-    strategy:
-      matrix:
-        architecture: [amd64, arm64]
-        os: [linux, darwin]
-
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
