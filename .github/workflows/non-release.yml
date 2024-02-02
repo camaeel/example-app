@@ -75,9 +75,9 @@ jobs:
           args: release --clean --snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SNAPSHOT_REF: ${{ github.ref }}
       
       - name: Push images to registry
         run: |
           bash <(cat dist/artifacts.json| jq -r '.[] | select(.type=="Docker Image") | "docker push \(.name|@sh)"')
 
-          
