@@ -48,6 +48,7 @@ dockers:
     - "--platform=linux/amd64"
     goarch: amd64
     dockerfile: Dockerfile.goreleaser
+    skip_push: false
 
   - image_templates:
     - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-arm64'
@@ -57,12 +58,14 @@ dockers:
     - "--platform=linux/arm64"
     goarch: arm64
     dockerfile: Dockerfile.goreleaser
-    
+    skip_push: false
+
 docker_manifests:
   - name_template: '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}'
     image_templates:
     - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-amd64'
     - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-arm64'
+    skip_push: false
 
 archives:
   - format: tar.gz
