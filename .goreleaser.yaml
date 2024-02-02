@@ -23,6 +23,10 @@ git:
   ignore_tags:
   - example-app-* #helm chart
 
+env:
+  - REGISTRY={{ if index .Env "REGISTRY"  }}{{ .Env.REGISTRY }}{{ else }}local{{ end }}
+  - IMAGE_NAME={{ if index .Env "IMAGE_NAME"  }}{{ .Env.IMAGE_NAME }}{{ else }}example-app{{ end }}
+
 builds:
   - env:
       - CGO_ENABLED=0
@@ -36,7 +40,7 @@ builds:
 
 dockers:
   - image_templates:
-    - 'ghcr.io/camaeel/example-app:{{ .Tag }}-amd64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-amd64'
     use: buildx
     build_flag_templates:
     - "--pull"
@@ -45,7 +49,7 @@ dockers:
     dockerfile: Dockerfile.goreleaser
 
   - image_templates:
-    - 'ghcr.io/camaeel/example-app:{{ .Tag }}-arm64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-arm64'
     use: buildx
     build_flag_templates:
     - "--pull"
@@ -56,8 +60,8 @@ dockers:
 docker_manifests:
   - name_template: 'ghcr.io/camaeel/example-app:{{ .Tag }}'
     image_templates:
-    - 'ghcr.io/camaeel/example-app:{{ .Tag }}-amd64'
-    - 'ghcr.io/camaeel/example-app:{{ .Tag }}-arm64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-amd64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-arm64'
 
 archives:
   - format: tar.gz
