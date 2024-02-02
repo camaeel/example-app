@@ -17,6 +17,10 @@ on:
       - 'tests.rest'
   workflow_call:
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 name: Build and test
 jobs:
   test-and-release-snapshot:
