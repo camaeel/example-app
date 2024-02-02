@@ -92,4 +92,4 @@ release:
   prerelease: auto
 
 snapshot:
-  name_template: '{{ if index .Env SNAPSHOT_REF }}{{ .Env.SNAPSHOT_REF }}{{ else }}{{ incpatch .Version }}-devel{{ end }}'
+  name_template: '{{ if index .Env "SNAPSHOT_REF" }}{{ .Env.SNAPSHOT_REF }}{{ else }}{{ incpatch .Version }}-devel{{ end }}'
