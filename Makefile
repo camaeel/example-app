@@ -21,4 +21,4 @@ helm-install:
 		--set cnpgdb.storage.storageClass=proxmox-data-ephemeral
 
 goreleaser:
-	goreleaser release  --clean --auto-snapshot
+	goreleaser release  --clean --snapshot
