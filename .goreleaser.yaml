@@ -41,7 +41,7 @@ builds:
 
 dockers:
   - image_templates:
-    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-amd64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}-amd64'
     use: buildx
     build_flag_templates:
     - "--pull"
@@ -51,7 +51,7 @@ dockers:
     skip_push: false
 
   - image_templates:
-    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-arm64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}-arm64'
     use: buildx
     build_flag_templates:
     - "--pull"
@@ -61,10 +61,10 @@ dockers:
     skip_push: false
 
 docker_manifests:
-  - name_template: '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}'
+  - name_template: '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}'
     image_templates:
-    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-amd64'
-    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-arm64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}-amd64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}-arm64'
     skip_push: false
 
 archives:
@@ -90,3 +90,6 @@ changelog:
 
 release:
   prerelease: auto
+
+snapshot:
+  name_template: '{{ incpatch .Version }}-devel'
