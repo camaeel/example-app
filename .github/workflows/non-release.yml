@@ -71,7 +71,7 @@ jobs:
       - name: Set SNAPSHOT_VERSION if not pull request
         if: github.event_name != 'pull_request'
         run: |
-          echo "SNAPSHOT_VERSION=${{ env.GITHUB_REF_NAME }}" >> $GITHUB_ENV
+          echo "SNAPSHOT_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
       - name: Run GoReleaser  
         uses: goreleaser/goreleaser-action@v5
         with:
