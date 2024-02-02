@@ -79,3 +79,5 @@ jobs:
       - name: Push images to registry
         run: |
           bash <(cat dist/artifacts.json| jq -r '.[] | select(.type=="Docker Image") | "docker push \(.name|@sh)"')
+
+          
