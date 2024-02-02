@@ -10,7 +10,10 @@ env:
 
 name: Build, test and release
 jobs:
-  test-and-release-snapshot:
+  test-and-release:
+    permissions:
+      contents: read
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
