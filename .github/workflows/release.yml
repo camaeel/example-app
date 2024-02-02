@@ -1,0 +1,38 @@
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+name: Release
+jobs:
+  docker-build:
+    permissions:
+      packages: write
+      id-token: write
+      contents: read
+    uses: ./.github/workflows/docker.yml
+  build-and-test:
+    uses: ./.github/workflows/build.yml
+  create-release:
+    permissions:
+      contents: write
+    needs:
+      - docker-build
+      - build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-binaries
+          path: bin
+          merge-multiple: true
+      - name: debug list files
+        run: find .
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: bin/app*
+          append_body: true
+          body: |
+            Build also available as docker image:
+            `ghcr.io/${{ github.repository }}:${{ github.ref_name }}`

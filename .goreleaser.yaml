@@ -17,7 +17,6 @@ before:
   hooks:
     # You may remove this if you don't use go modules.
     # - go mod tidy #tidy should be done before pushing
-    - go mod download
     # you may remove this if you don't need go generate
     - go generate ./...
 git:
@@ -41,31 +40,28 @@ builds:
 
 dockers:
   - image_templates:
-    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}-amd64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-amd64'
     use: buildx
     build_flag_templates:
     - "--pull"
     - "--platform=linux/amd64"
     goarch: amd64
     dockerfile: Dockerfile.goreleaser
-    skip_push: false
 
   - image_templates:
-    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}-arm64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-arm64'
     use: buildx
     build_flag_templates:
     - "--pull"
     - "--platform=linux/arm64"
     goarch: arm64
     dockerfile: Dockerfile.goreleaser
-    skip_push: false
-
+    
 docker_manifests:
-  - name_template: '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}'
+  - name_template: '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}'
     image_templates:
-    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}-amd64'
-    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ if .IsSnapshot }}{{ .Version }}{{ else }}{{ .Tag }}{{ end }}-arm64'
-    skip_push: false
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-amd64'
+    - '{{ .Env.REGISTRY }}/{{ .Env.IMAGE_NAME }}:{{ .Tag }}-arm64'
 
 archives:
   - format: tar.gz
@@ -87,9 +83,3 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
-
-release:
-  prerelease: auto
-
-snapshot:
-  name_template: '{{ if index .Env "SNAPSHOT_VERSION" }}{{ .Env.SNAPSHOT_VERSION }}{{ else }}{{ incpatch .Version }}-devel{{ end }}'
