@@ -24,6 +24,9 @@ env:
 name: Build and test
 jobs:
   test-and-release-snapshot:
+    permissions:
+      contents: read
+      packages: write    
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
