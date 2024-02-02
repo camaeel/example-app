@@ -8,7 +8,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
       
 
-name: Build and test
+name: Build, test and release
 jobs:
   test-and-release-snapshot:
     runs-on: ubuntu-latest
@@ -53,6 +53,6 @@ jobs:
         uses: goreleaser/goreleaser-action@v5
         with:
           version: latest
-          args: release --clean --snapshot
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
