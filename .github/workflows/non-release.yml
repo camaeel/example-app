@@ -55,16 +55,6 @@ jobs:
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v3
 
-      # Login against a Docker registry except on PR
-      # https://github.com/docker/login-action
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Set SNAPSHOT_VERSION if not pull request
         if: github.event_name != 'pull_request'
         run: |
@@ -78,34 +68,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      # - name: Extract docker containers built
-      #   uses: sergeysova/jq-action@v2
-      #   id: docker_images_jq
-      #   with:
-      #     cmd: "jq -r -c '[.[] | select(.type==\"Docker Image\") | .name]' dist/artifacts.json"
-      #     multiline: false
-        
-      - name: set ouptut
+      - name: set docker_images
         id: docker_images
         run: |
           set -eux
           DOCKER_IMAGES=`jq -r -c '[.[] | select(.type=="Docker Image") | .name]' dist/artifacts.json`
           echo "docker_images=$DOCKER_IMAGES" >> "$GITHUB_OUTPUT"
 
-      - name: Push images to registry
-        if: github.event_name != 'pull_request'
-        run: |
-          for image in `echo '${{ steps.docker_images.outputs.value }}' | jq -r '.[]'`; do
-            docker push "$image"
-          done
-
-      - name: Debug
-        run: |
-          echo "$GITHUB_OUTPUT"
-          echo "${{ steps.docker_images.outputs.value }}"
-          echo "${{ steps.docker_images.outputs.docker_images }}"
-          echo "${{ needs.test-and-release-snapshot.outputs.docker_images }}"
   scan:
+    name: "scan images with trivy"
     needs:
       - test-and-release-snapshot
     runs-on: ubuntu-latest
@@ -113,5 +84,24 @@ jobs:
       matrix:
         docker_image: ${{ fromJSON(needs.test-and-release-snapshot.outputs.docker_images ) }}
     steps:
-      - run: |
-          echo "${{ matrix.docker_image }}"
+      - name: Run Trivy vulnerability scanner in repo mode - non schedule & non master
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ matrix.docker_image }}
+          scan-type: 'image'
+          ignore-unfixed: true # we want to have full report
+          severity: 'CRITICAL,HIGH' #report all severities
+          exit-code: '1'
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to registry
+        if: github.event_name != 'pull_request'
+        run: |
+          docker push "${{ matrix.docker_image }}"
