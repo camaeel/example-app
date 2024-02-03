@@ -10,7 +10,7 @@ on:
     
 jobs:
   build:
-    name: Build
+    name: Vuln reporting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
