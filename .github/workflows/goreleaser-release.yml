@@ -10,7 +10,11 @@ env:
 
 name: Build, test and release
 jobs:
-  test-and-release:
+  trivy-scan:
+    uses: ./.github/workflows/triby.yml
+  release:
+    needs:
+      - trivy-scan
     permissions:
       contents: write
       packages: write
