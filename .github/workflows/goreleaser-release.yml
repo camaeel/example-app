@@ -12,8 +12,6 @@ name: Build, test and release
 jobs:
   trivy-scan:
     uses: ./.github/workflows/trivy.yml
-    permissions:
-      security-events: write
   test:
     uses: ./.github/workflows/test.yml      
   release:

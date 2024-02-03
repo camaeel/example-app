@@ -27,8 +27,6 @@ jobs:
     uses: ./.github/workflows/test.yml
   trivy-scan:
     uses: ./.github/workflows/trivy.yml
-    permissions:
-      security-events: write
   test-and-release-snapshot:
     needs:
       - trivy-scan
