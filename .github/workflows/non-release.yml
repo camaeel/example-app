@@ -115,7 +115,7 @@ jobs:
           ignore-unfixed: true # we want to have full report
           severity: 'CRITICAL,HIGH' #report all severities
           exit-code: '1'
-
+          format: 'table'
 
       # - name: Push to registry
       #   if: github.event_name != 'pull_request'
