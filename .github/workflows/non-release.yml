@@ -80,20 +80,21 @@ jobs:
       
       - name: Extract docker containers built
         uses: sergeysova/jq-action@v2
-        id: docker_images
+        id: docker_images_jq
         with:
           cmd: "jq -r -c '[.[] | select(.type==\"Docker Image\") | .name]' dist/artifacts.json"
           multiline: false
         
       - name: set ouptut
+        id: docker_images
         run: |
           set -eux
-          echo "docker_images='${{ steps.docker_images.outputs.value }}'" >> "$GITHUB_OUTPUT"
+          echo "docker_images='${{ steps.docker_images_jq.outputs.value }}'" >> "$GITHUB_OUTPUT"
 
       - name: Push images to registry
         if: github.event_name != 'pull_request'
         run: |
-          for image in `echo '${{ steps.docker_images.outputs.value }}' | jq -r '.[]'`; do
+          for image in `echo '${{ steps.docker_images_jq.outputs.value }}' | jq -r '.[]'`; do
             docker push "$image"
           done
 
