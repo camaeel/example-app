@@ -91,7 +91,7 @@ jobs:
       - name: Push images to registry
         if: github.event_name != 'pull_request'
         run: |
-          for image in `echo ${{ steps.docker_images.outputs.value }} | jq -r '.[]'`; do
+          for image in `echo '${{ steps.docker_images.outputs.value }}' | jq -r '.[]'`; do
             docker push "$image"
           done
 
