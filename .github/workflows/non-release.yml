@@ -36,7 +36,7 @@ jobs:
       packages: write    
     runs-on: ubuntu-latest
     outputs:
-      docker_images: steps.docker_images.outputs.value 
+      docker_images: ${{ steps.docker_images.outputs.docker_images }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -101,7 +101,8 @@ jobs:
       - name: Debug
         run: |
           echo "$GITHUB_OUTPUT"
-          echo "${{ steps.docker_images.outputs.value }}"
+          echo "${{ steps.docker_images_jq.outputs.value }}"
+          echo "${{ steps.docker_images.outputs.docker_images }}"
           echo "${{ needs.test-and-release-snapshot.outputs.docker_images }}"
   scan:
     needs:
