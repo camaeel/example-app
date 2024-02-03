@@ -9,8 +9,8 @@ on:
     - cron:  '00 7 * * 6'
 
 jobs:
-  build:
-    name: Trivy vulnerability scanner
+  trivy-scan-and-report:
+    name: Trivy vulnerability scanner & rport
     runs-on: ubuntu-latest
     permissions:
       security-events: write

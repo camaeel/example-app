@@ -3,7 +3,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  trivy-scan:
     name: Trivy vulnerability scanner
     runs-on: ubuntu-latest
     steps:
