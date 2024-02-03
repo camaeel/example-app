@@ -22,6 +22,8 @@ jobs:
       contents: write
       packages: write
     runs-on: ubuntu-latest
+    outputs:
+      docker_images: ${{ steps.docker_images.outputs.docker_images }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -56,3 +58,28 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: set docker_images
+        id: docker_images
+        run: |
+          set -eux
+          DOCKER_IMAGES=`jq -r -c '[.[] | select(.type=="Docker Image") | .name]' dist/artifacts.json`
+          echo "docker_images=$DOCKER_IMAGES" >> "$GITHUB_OUTPUT"
+
+  scan-images-and-sign:
+    name: "scan images with trivy"
+    needs:
+    - release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        docker_image: ${{ fromJSON(needs.release.outputs.docker_images ) }}
+    steps:
+      - name: Run Trivy vulnerability scanner in repo mode - non schedule & non master
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ matrix.docker_image }}
+          scan-type: 'image'
+          ignore-unfixed: true # we want to have full report
+          severity: 'CRITICAL,HIGH' #report all severities
+          exit-code: '1'
