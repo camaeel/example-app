@@ -80,7 +80,7 @@ jobs:
         uses: sergeysova/jq-action@v2
         id: docker_images
         with:
-          cmd: jq -r '[.[] | select(.type=="Docker Image") | .name]' dist/artifacts.json -r
+          cmd: "jq -r '[.[] | select(.type==\"Docker Image\") | .name]' dist/artifacts.json -r"
         
       - name: Push images to registry
         if: github.event_name != 'pull_request'
