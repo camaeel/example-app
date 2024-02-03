@@ -81,7 +81,7 @@ jobs:
         id: docker_images
         with:
           cmd: "jq -r -c '[.[] | select(.type==\"Docker Image\") | .name]' dist/artifacts.json"
-          multiline: true
+          multiline: false
         
       - name: set ouptut
         run: |
