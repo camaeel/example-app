@@ -89,12 +89,19 @@ jobs:
           echo "SNAPSHOT_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
       - name: Run GoReleaser  
         uses: goreleaser/goreleaser-action@v5
+        id: gorleaser
         with:
           version: latest
           args: release --clean --snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Extract docker containers built
+        uses: sergeysova/jq-action@v2
+        id: docker_images
+        with:
+          cmd: jq -r '[.[] | select(.type=="Docker Image") | .name]' dist/artifacts.json -r
+        
       - name: Push images to registry
         if: github.event_name != 'pull_request'
         run: |
