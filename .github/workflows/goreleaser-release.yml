@@ -66,7 +66,7 @@ jobs:
           DOCKER_IMAGES=`jq -r -c '[.[] | select(.type=="Docker Image") | .name]' dist/artifacts.json`
           echo "docker_images=$DOCKER_IMAGES" >> "$GITHUB_OUTPUT"
 
-  scan-images-and-sign:
+  scan-images:
     name: "scan images with trivy"
     needs:
     - release
