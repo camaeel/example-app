@@ -86,5 +86,7 @@ jobs:
       - name: Push images to registry
         if: github.event_name != 'pull_request'
         run: |
-          bash <(cat dist/artifacts.json| jq -r '.[] | select(.type=="Docker Image") | "docker push \(.name|@sh)"')
+          for image in "${{ steps.docker_images.outputs.value }}"; do
+            docker push "$image"
+          done
 
