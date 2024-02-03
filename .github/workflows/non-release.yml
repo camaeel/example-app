@@ -59,6 +59,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           echo "SNAPSHOT_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+          
       - name: Run GoReleaser  
         uses: goreleaser/goreleaser-action@v5
         id: gorleaser
@@ -92,6 +93,7 @@ jobs:
 
   scan:
     name: "scan images with trivy"
+    if: github.event_name != 'pull_request'
     needs:
       - test-and-release-snapshot
     runs-on: ubuntu-latest
@@ -100,7 +102,6 @@ jobs:
         docker_image: ${{ fromJSON(needs.test-and-release-snapshot.outputs.docker_images ) }}
     steps:
       - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -117,7 +118,3 @@ jobs:
           exit-code: '1'
           format: 'table'
 
-      # - name: Push to registry
-      #   if: github.event_name != 'pull_request'
-      #   run: |
-      #     docker push "${{ matrix.docker_image }}"
