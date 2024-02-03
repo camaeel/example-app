@@ -24,7 +24,7 @@ env:
 name: Build and test
 jobs:
   trivy-scan:
-    uses: ./.github/workflows/triby.yml
+    uses: ./.github/workflows/trivy.yml
   test-and-release-snapshot:
     needs:
       - trivy-scan
