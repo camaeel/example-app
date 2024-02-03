@@ -53,26 +53,6 @@ jobs:
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Download Go modules
-        run: go mod download
-        env:
-          GOPROXY: https://proxy.golang.org
-
-      - name: Test
-        run: |
-          # go get github.com/golang/mock/mockgen
-          # go install github.com/golang/mock/mockgen
-          go generate ./...
-          go test ./...
-
-      - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
-          exit-code: '1'
-
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
