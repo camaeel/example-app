@@ -95,6 +95,9 @@ jobs:
             docker push "$image"
           done
 
+      - name: Debug
+        run: |
+          echo '${{ needs.test-and-release-snapshot.outputs.docker_images }}'
   scan:
     needs:
       - test-and-release-snapshot
