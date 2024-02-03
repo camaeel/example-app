@@ -83,6 +83,11 @@ jobs:
           cmd: "jq -r '[.[] | select(.type==\"Docker Image\") | .name]' dist/artifacts.json"
           multiline: true
         
+      - name: set ouptut
+        run: |
+          set -eux
+          echo "docker_images=${{ steps.docker_images.outputs.value }}" >> "$GITHUB_OUTPUT"
+
       - name: Push images to registry
         if: github.event_name != 'pull_request'
         run: |
@@ -90,3 +95,13 @@ jobs:
             docker push "$image"
           done
 
+  scan:
+    needs:
+      - test-and-release-snapshot
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        docker_image: ${{ fromJSON(needs.test-and-release-snapshot.outputs.docker_images ) }}
+    steps:
+      - run: |
+          echo "${{ matrix.docker_image }}"
