@@ -35,6 +35,8 @@ jobs:
       contents: read
       packages: write    
     runs-on: ubuntu-latest
+    outputs:
+      docker_images: steps.docker_images.outputs.value 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
