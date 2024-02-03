@@ -14,9 +14,12 @@ jobs:
     uses: ./.github/workflows/trivy.yml
     permissions:
       security-events: write
+  test:
+    uses: ./.github/workflows/test.yml      
   release:
     needs:
       - trivy-scan
+      - test
     permissions:
       contents: write
       packages: write
