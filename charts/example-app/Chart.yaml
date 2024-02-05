@@ -31,6 +31,6 @@ dependencies:
   - name: cnpgdb
     alias: cnpgdb
     condition: cnpgdb.enabled
-    repository: https://camaeel.github.io/helm-charts/
+#    repository: https://camaeel.github.io/helm-charts/
     version: 0.1.0
 

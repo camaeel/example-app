@@ -138,4 +138,48 @@ cnpgdb:
   enabled: false
   storage:
     size: 1Gi
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://example-app-dev-postgres-backup/
+      s3Credentials:
+        inheritFromIAMRole: false
+        accessKeyId:
+          name: example-app-cnpgdb-db-backup-aws-creds
+          key: access_key
+        secretAccessKey:
+          name: example-app-cnpgdb-db-backup-aws-creds
+          key: secret_key
+#        region:
+        sessionToken:
+          name: example-app-cnpgdb-db-backup-aws-creds
+          key: security_token
+      wal:
+        compression: gzip
+        maxParallel: 2
+#        encryption: "aws:kms" #unset to use buckets default ustomer-manage KMS key
+      data:
+        compression: gzip
+#        encryption: "aws:kms" #unset to use buckets default ustomer-manage KMS key
+      tags:
+        project: example-app
+        env_name: dev
+        source:	https://github.com/camaeel/example-app
+      historyTags:
+        historical: "true"
 
+    # should be lower than S3 bucket retention policy
+    retentionPolicy: 10d
+#    target:
+  scheduleBackups:
+    - name: daily
+      schedule: "20 22 * * *"
+
+  # external secrets operator enabled
+  eso:
+    enabled: true
+    databaseBackup:
+      #vaultUrl: "https://vault.example.com"
+      credsPath: /aws/creds/example-app-dev-postgres-backup
+      auth:
+        mountPath: kubernetes
+        role: example-app-dev-postgres-backup
