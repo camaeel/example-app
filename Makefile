@@ -29,5 +29,8 @@ helm-template:
 		--set cnpgdb.storage.storageClass=proxmox-data-ephemeral \
 		--set cnpgdb.eso.databaseBackup.vaultUrl=`kubectl get ingress -n vault vault -ojson | jq -r '.spec.rules[0].host'`
 
+terraform-init:
+	terraform -chdir=./terraform init -backend-config=bucket=`aws ssm get-parameter --name /terrraform/state-bucket | jq -r '.Parameter.Value'`
+
 goreleaser:
 	goreleaser release  --clean --snapshot
