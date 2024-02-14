@@ -8,6 +8,6 @@ module "backup-bucket" {
   vault_iam_identity_arn = data.aws_iam_user.vault.arn
   vault_aws_backend_path = "aws"
   vault_kubernetes_auth_path = "kubernetes"
-  namespaces = ["example-app"]
+  namespaces = ["example-app", "example-app-restore"]
   service_accounts = ["example-app-cnpgdb-db-backup-aws-creds"]
 }

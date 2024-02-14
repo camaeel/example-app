@@ -17,17 +17,25 @@ docker:
 
 helm-install:
 	helm upgrade --install -n example-app example-app charts/example-app --create-namespace \
-		--set cnpgdb.enabled=true \
-		--set bitnamipostgres.enabled=false \
-		--set cnpgdb.storage.storageClass=proxmox-data-ephemeral \
-		--set cnpgdb.eso.databaseBackup.vaultUrl=`kubectl get ingress -n vault vault -ojson | jq -r '.spec.rules[0].host'`
+		-f charts/example-app/init-values.yml \
+		--set cnpgdb.eso.databaseBackup.vaultUrl=https://`kubectl get ingress -n vault vault -ojson | jq -r '.spec.rules[0].host'`
+
+helm-restore:
+	helm upgrade --install -n example-app-restore example-app charts/example-app --create-namespace \
+		-f charts/example-app/restore-values.yml \
+		--set cnpgdb.eso.databaseBackup.vaultUrl=https://`kubectl get ingress -n vault vault -ojson | jq -r '.spec.rules[0].host'`
+
 
 helm-template:
 	helm template -n example-app example-app charts/example-app \
-		--set cnpgdb.enabled=true \
-		--set bitnamipostgres.enabled=false \
-		--set cnpgdb.storage.storageClass=proxmox-data-ephemeral \
-		--set cnpgdb.eso.databaseBackup.vaultUrl=`kubectl get ingress -n vault vault -ojson | jq -r '.spec.rules[0].host'`
+		-f charts/example-app/init-values.yml \
+		--set cnpgdb.eso.databaseBackup.vaultUrl=https://`kubectl get ingress -n vault vault -ojson | jq -r '.spec.rules[0].host'`
+
+helm-template-restore:
+	helm template -n example-app-restore example-app charts/example-app \
+		-f charts/example-app/restore-values.yml \
+		--set cnpgdb.eso.databaseBackup.vaultUrl=https://`kubectl get ingress -n vault vault -ojson | jq -r '.spec.rules[0].host'`
+
 
 terraform-init:
 	terraform -chdir=./terraform init -backend-config=bucket=`aws ssm get-parameter --name /terrraform/state-bucket | jq -r '.Parameter.Value'`

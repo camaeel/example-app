@@ -1,0 +1,35 @@
+bitnamipostgres:
+  enabled: false
+cnpgdb:
+  enabled: true
+  storage:
+    storageClass: proxmox-data-ephemeral
+  backup: null
+#    barmanObjectStore:
+#      destinationPath: s3://example-app-dev-postgres-backup/restore1
+  bootstrap:
+    recovery:
+      source: s3Backup
+      backup:
+        name: before
+  externalClusters:
+    - name: s3Backup
+      barmanObjectStore:
+        destinationPath: s3://example-postgres-backup
+        s3Credentials:
+          inheritFromIAMRole: false
+          accessKeyId:
+            name: example-app-cnpgdb-db-backup-aws-creds
+            key: access_key
+          secretAccessKey:
+            name: example-app-cnpgdb-db-backup-aws-creds
+            key: secret_key
+          sessionToken:
+            name: example-app-cnpgdb-db-backup-aws-creds
+            key: security_token
+          region:
+            name: region
+            key: region
+        wal:
+          compression: gzip
+          maxParallel: 2

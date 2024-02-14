@@ -1,0 +1,11 @@
+bitnamipostgres:
+  enabled: false
+cnpgdb:
+  enabled: true
+  storage:
+    storageClass: proxmox-data-ephemeral
+  bootstrap:
+    initdb: {}
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://example-app-dev-postgres-backup/

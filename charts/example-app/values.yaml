@@ -140,7 +140,7 @@ cnpgdb:
     size: 1Gi
   backup:
     barmanObjectStore:
-      destinationPath: s3://example-app-dev-postgres-backup/
+#      destinationPath: s3://example-app-dev-postgres-backup/
       s3Credentials:
         inheritFromIAMRole: false
         accessKeyId:
