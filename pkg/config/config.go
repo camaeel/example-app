@@ -41,7 +41,7 @@ func LoadConfig(file *string) {
 			log.Fatalf("Error reading config file %s: %s", *file, err)
 		}
 
-		err = viper.UnmarshalKey("datasource", &dsCfg)
+		err = viper.Unmarshal(&dsCfg)
 		if err != nil {
 			log.Fatalf("Unable to decode datasource config into struct: %s", err)
 		}

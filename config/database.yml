@@ -1,4 +1,3 @@
-datasource:
-  jdbc_url: "jdbc:postgres://db/postgres?sslmode=disable"
-  username: "postgres"
-  password: "postgres"
+jdbc_url: "jdbc:postgres://db/postgres?sslmode=disable"
+username: "postgres"
+password: "postgres"
