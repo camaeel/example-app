@@ -6,9 +6,12 @@ services:
     image: example-app:local
     build: .
     environment:
-      DATABASE_URL: "postgres://postgres:postgres@db/postgres?sslmode=disable"
+#      DATABASE_URL: "postgres://postgres:postgres@db/postgres?sslmode=disable"
+      DATABASE_CONFIG_FILE: "/config/database.yml"
     ports:
       - "8080:8080"
+    volumes:
+      - ./config/:/config
     depends_on:
       - db
   db:

@@ -1,7 +1,8 @@
 package middleware
 
 import (
-	"database/sql"
+	"fmt"
+	"github.com/camaeel/example-app/pkg/database"
 	"log"
 	"time"
 
@@ -25,8 +26,15 @@ func Logger() gin.HandlerFunc {
 	}
 }
 
-func InsertDB(db *sql.DB) gin.HandlerFunc {
+func InsertDB() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		db, err := database.SetupDriver()
+		defer db.Close()
+
+		if err != nil {
+			log.Printf("ERROR: connecting to database: %v", err)
+			c.AbortWithError(500, fmt.Errorf("Couldn't connect to database"))
+		}
 		c.Set("db", db)
 
 		// before request

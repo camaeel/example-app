@@ -13,7 +13,7 @@ build:
 	go build -o bin/app github.com/camaeel/example-app/cmd/app
 
 docker:
-	docker buildx build -t example-app:local .
+	docker buildx build -t example-app:local --load .
 
 helm-install:
 	helm upgrade --install -n example-app example-app charts/example-app --create-namespace \

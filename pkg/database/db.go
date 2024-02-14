@@ -2,24 +2,20 @@ package database
 
 import (
 	"database/sql"
-	"net/url"
-	"os"
-
+	"github.com/camaeel/example-app/pkg/config"
 	_ "github.com/lib/pq"
 )
 
 func SetupDriver() (*sql.DB, error) {
-	connStr := os.Getenv("DATABASE_URL")
-	u, err := url.Parse(connStr)
-	if err != nil {
-		return nil, err
-	}
-
-	if u.Scheme == "postgresql" {
-		u.Scheme = "postgres"
-	}
-
+	dbCfg := config.GetConfig()
 	// connStr := "postgres://pqgotest:password@localhost/pqgotest?sslmode=verify-full"
-	db, err := sql.Open(u.Scheme, connStr)
+
+	// normalize driverName
+	driverName := dbCfg.DatasourceUrl.Scheme
+	if driverName == "postgresql" {
+		driverName = "postgres"
+	}
+
+	db, err := sql.Open(driverName, dbCfg.DatasourceUrl.String())
 	return db, err
 }
