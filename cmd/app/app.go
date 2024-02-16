@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+
 	"github.com/camaeel/example-app/pkg/config"
 	"github.com/camaeel/example-app/pkg/database"
 	"github.com/camaeel/example-app/pkg/handlers/health"
@@ -12,14 +14,13 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"log"
 )
 
 func main() {
 
 	port := 8080
 
-	configFile := flag.String("configFile", "config/database.yml", "Path to config file")
+	configFile := flag.String("configFile", "", "Path to config file. Default is empty - then DATABASE_URL env variable is used")
 	flag.Parse()
 	config.LoadConfig(configFile)
 	viper.WatchConfig()
