@@ -183,3 +183,5 @@ cnpgdb:
       auth:
         mountPath: kubernetes
         role: example-app-dev-postgres-backup
+zalandoPostgres:
+  enabled: true
