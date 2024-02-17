@@ -8,8 +8,6 @@ on:
       - 'tests.rest'
     branches:
       - '*'
-    tags-ignore:
-      - 'example-app-*'
   pull_request:
     paths-ignore:
       - 'example/**'
