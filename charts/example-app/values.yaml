@@ -183,5 +183,10 @@ cnpgdb:
       auth:
         mountPath: kubernetes
         role: example-app-dev-postgres-backup
-zalandoPostgres:
-  enabled: true
+  logicalBackup:
+    enabled: true
+    databases:
+      - app
+    bucket: s3://example-app-dev-postgres-backup/logical-backup/
+    encrypt:
+      enabled: true
