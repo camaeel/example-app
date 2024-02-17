@@ -22,7 +22,8 @@ before:
     - go generate ./...
 git:
   ignore_tags:
-  - example-app-* #helm chart
+  # doesn't work
+  - example-app-*
 
 env:
   - REGISTRY={{ if index .Env "REGISTRY"  }}{{ .Env.REGISTRY }}{{ else }}local{{ end }}
