@@ -6,7 +6,7 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/lib/pq v1.10.9
-	github.com/spf13/viper v1.18.2
+	github.com/spf13/viper v1.19.0
 )
 
 require (
