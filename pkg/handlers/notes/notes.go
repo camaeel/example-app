@@ -2,6 +2,7 @@ package notes
 
 import (
 	"database/sql"
+	"net/http"
 
 	"github.com/camaeel/example-app/pkg/models/notes"
 	"github.com/gin-gonic/gin"
@@ -31,7 +32,11 @@ func Get(c *gin.Context) {
 	id := c.Params.ByName("id")
 	note, err := notes.Get(db, id)
 	if err != nil {
-		c.AbortWithError(503, err)
+		if err == sql.ErrNoRows {
+			c.AbortWithStatus(http.StatusNotFound)
+		} else {
+			c.AbortWithError(503, err)
+		}
 	} else {
 		c.JSON(200, note)
 	}

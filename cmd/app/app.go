@@ -42,7 +42,7 @@ func main() {
 	r := gin.Default()
 
 	r.Use(middleware.Logger())
-	r.Use(middleware.InsertDB())
+	r.Use(middleware.InsertDB(database.SetupDriver))
 
 	r.GET("/healthz", health.Healthz)
 	r.GET("/notes", notes.List)

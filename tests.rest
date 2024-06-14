@@ -1,11 +1,12 @@
+### Health endpoint
 
 GET http://localhost:8080/healthz
 
-###
+### List notes
 
 GET http://localhost:8080/notes
 
-###
+### Create note
 
 POST http://localhost:8080/notes HTTP/1.1
 content-type: application/json
@@ -15,9 +16,9 @@ content-type: application/json
   "content": "test-Content"
 }
 
-###
+### Update note
 
-PUT http://localhost:8080/notes/2 HTTP/1.1
+PUT http://localhost:8080/notes/1 HTTP/1.1
 content-type: application/json
 
 {
@@ -26,12 +27,12 @@ content-type: application/json
 }
 
 
-###
+### Get node
 
 GET http://localhost:8080/notes/1 HTTP/1.1
 content-type: application/json
 
-### 
+### Delete node
 
-DELETE http://localhost:8080/notes/34 HTTP/1.1
+DELETE http://localhost:8080/notes/1 HTTP/1.1
 content-type: application/json

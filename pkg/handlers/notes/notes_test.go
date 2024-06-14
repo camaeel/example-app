@@ -1,187 +1,228 @@
 package notes
 
-// import (
-// 	"bytes"
-// 	"encoding/json"
-// 	"net/http"
-// 	"net/http/httptest"
-// 	"testing"
+import (
+	"bytes"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 
-// 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-// 	"github.com/camaeel/example-app/pkg/models/notes"
-// 	"github.com/gin-gonic/gin"
-// 	"github.com/stretchr/testify/assert"
-// )
+	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/camaeel/example-app/pkg/models/notes"
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+)
 
-// func TestList(t *testing.T) {
-// 	// Create a mock database
-// 	db, _, err := sqlmock.New()
-// 	if err != nil {
-// 		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
-// 	}
-// 	defer db.Close()
+func TestList(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
 
-// 	// Define test notes data
-// 	testNotes := []notes.Note{
-// 		{
-// 			Title:   "Test Note 1",
-// 			Content: "This is a test note.",
-// 		},
-// 		{
-// 			Title:   "Test Note 2",
-// 			Content: "Another test note.",
-// 		},
-// 	}
+	rows := sqlmock.NewRows([]string{"id", "title", "content"}).
+		AddRow(1, "Test Note 1", "This is a test note.").
+		AddRow(2, "Test Note 2", "Another test note.")
 
-// 	// Create a test router
-// 	router := gin.New()
-// 	router.GET("/notes", func(c *gin.Context) {
-// 		c.Set("db", db)
-// 		List(c)
-// 	})
+	mock.ExpectQuery("SELECT \\* FROM notes").WillReturnRows(rows)
 
-// 	// Create a test request
-// 	req := httptest.NewRequest("GET", "/notes", nil)
+	router := gin.New()
+	router.GET("/notes", func(c *gin.Context) {
+		c.Set("db", db)
+		List(c)
+	})
 
-// 	// Create a test response recorder
-// 	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/notes", nil)
+	w := httptest.NewRecorder()
 
-// 	// Serve the request
-// 	router.ServeHTTP(w, req)
+	router.ServeHTTP(w, req)
 
-// 	// Assert the expected response
-// 	assert.Equal(t, http.StatusOK, w.Code)
-// 	assert.JSONEq(t, `[{"title":"Test Note 1","body":"This is a test note."},{"title":"Test Note 2","body":"Another test note."}]`, w.Body.String())
-// }
+	assert.Equal(t, http.StatusOK, w.Code)
 
-// func TestGet(t *testing.T) {
-// 	// Create a mock database
-// 	db := new(MockDB)
+	var notes []notes.Note
+	err = json.Unmarshal(w.Body.Bytes(), &notes)
+	assert.NoError(t, err)
+	assert.Len(t, notes, 2)
+	assert.Equal(t, notes[0].Title, "Test Note 1")
+	assert.Equal(t, notes[0].Content, "This is a test note.")
+	assert.Equal(t, notes[1].Title, "Test Note 2")
+	assert.Equal(t, notes[1].Content, "Another test note.")
 
-// 	// Define test note data
-// 	testNote := notes.Note{
-// 		Title:   "Test Note",
-// 		Content: "This is a test note.",
-// 	}
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
 
-// 	// Mock database response
-// 	db.On("Get", "1").Return(&testNote, nil)
+func TestGetExists(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
 
-// 	// Create a test router
-// 	router := gin.New()
-// 	router.GET("/notes/:id", func(c *gin.Context) {
-// 		c.Set("db", db)
-// 		Get(c)
-// 	})
+	rows := sqlmock.NewRows([]string{"id", "title", "content"}).
+		AddRow(1, "Test Note", "This is a test note.")
 
-// 	// Create a test request
-// 	req := httptest.NewRequest("GET", "/notes/1", nil)
+	mock.ExpectQuery("SELECT \\* FROM notes where ID = \\$1").
+		WithArgs("1").
+		WillReturnRows(rows)
 
-// 	// Create a test response recorder
-// 	w := httptest.NewRecorder()
+	router := gin.New()
+	router.GET("/notes/:id", func(c *gin.Context) {
+		c.Set("db", db)
+		Get(c)
+	})
 
-// 	// Serve the request
-// 	router.ServeHTTP(w, req)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Set("db", db)
 
-// 	// Assert the expected response
-// 	assert.Equal(t, http.StatusOK, w.Code)
-// 	assert.JSONEq(t, `{"title":"Test Note","body":"This is a test note."}`, w.Body.String())
-// }
+	req := httptest.NewRequest(http.MethodGet, "/notes/1", nil)
 
-// func TestDelete(t *testing.T) {
-// 	// Create a mock database
-// 	db := new(MockDB)
+	router.ServeHTTP(w, req)
 
-// 	// Mock database response
-// 	db.On("Delete", "1").Return(nil)
+	assert.Equal(t, http.StatusOK, w.Code)
 
-// 	// Create a test router
-// 	router := gin.New()
-// 	router.DELETE("/notes/:id", func(c *gin.Context) {
-// 		c.Set("db", db)
-// 		Delete(c)
-// 	})
+	var note notes.Note
+	err = json.Unmarshal(w.Body.Bytes(), &note)
+	assert.NoError(t, err)
+	assert.Equal(t, "Test Note", note.Title)
+	assert.Equal(t, "This is a test note.", note.Content)
 
-// 	// Create a test request
-// 	req := httptest.NewRequest("DELETE", "/notes/1", nil)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
 
-// 	// Create a test response recorder
-// 	w := httptest.NewRecorder()
+func TestGetNotExists(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
 
-// 	// Serve the request
-// 	router.ServeHTTP(w, req)
+	rows := sqlmock.NewRows([]string{"id", "title", "content"})
 
-// 	// Assert the expected response
-// 	assert.Equal(t, http.StatusOK, w.Code)
-// 	assert.JSONEq(t, `{"result":"ok"}`, w.Body.String())
-// }
+	mock.ExpectQuery("SELECT \\* FROM notes where ID = \\$1").
+		WithArgs("1").
+		WillReturnRows(rows)
 
-// func TestCreate(t *testing.T) {
-// 	// Create a mock database
-// 	db := new(MockDB)
+	router := gin.New()
+	router.GET("/notes/:id", func(c *gin.Context) {
+		c.Set("db", db)
+		Get(c)
+	})
 
-// 	// Define test note data
-// 	testNote := notes.Note{
-// 		Title:   "Test Note",
-// 		Content: "This is a test note.",
-// 	}
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Set("db", db)
 
-// 	// Mock database response
-// 	db.On("Create", testNote).Return(nil)
+	req := httptest.NewRequest(http.MethodGet, "/notes/1", nil)
 
-// 	// Create a test router
-// 	router := gin.New()
-// 	router.POST("/notes", func(c *gin.Context) {
-// 		c.Set("db", db)
-// 		Create(c)
-// 	})
+	router.ServeHTTP(w, req)
 
-// 	// Create a test request
-// 	reqBody, _ := json.Marshal(testNote)
-// 	req := httptest.NewRequest("POST", "/notes", bytes.NewBuffer(reqBody))
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	assert.Empty(t, w.Body.Bytes())
 
-// 	// Create a test response recorder
-// 	w := httptest.NewRecorder()
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
 
-// 	// Serve the request
-// 	router.ServeHTTP(w, req)
+func TestDelete(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
 
-// 	// Assert the expected response
-// 	assert.Equal(t, http.StatusOK, w.Code)
-// 	assert.JSONEq(t, `{"result":"ok"}`, w.Body.String())
-// }
+	mock.ExpectExec("DELETE FROM notes WHERE id = \\$1").
+		WithArgs("1").
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
-// func TestUpdate(t *testing.T) {
-// 	// Create a mock database
-// 	db := new(MockDB)
+	router := gin.New()
+	router.DELETE("/notes/:id", func(c *gin.Context) {
+		c.Set("db", db)
+		Delete(c)
+	})
 
-// 	// Define test note data
-// 	testNote := notes.Note{
-// 		Title:   "Updated Test Note",
-// 		Content: "This is an updated test note.",
-// 	}
+	req := httptest.NewRequest(http.MethodDelete, "/notes/1", nil)
+	w := httptest.NewRecorder()
 
-// 	// Mock database response
-// 	db.On("Update", "1", testNote).Return(nil)
+	router.ServeHTTP(w, req)
 
-// 	// Create a test router
-// 	router := gin.New()
-// 	router.PUT("/notes/:id", func(c *gin.Context) {
-// 		c.Set("db", db)
-// 		Update(c)
-// 	})
+	assert.Equal(t, http.StatusOK, w.Code)
 
-// 	// Create a test request
-// 	reqBody, _ := json.Marshal(testNote)
-// 	req := httptest.NewRequest("PUT", "/notes/1", bytes.NewBuffer(reqBody))
+	var response map[string]interface{}
+	err = json.Unmarshal(w.Body.Bytes(), &response)
+	assert.NoError(t, err)
+	assert.Equal(t, response["result"], "ok")
 
-// 	// Create a test response recorder
-// 	w := httptest.NewRecorder()
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
 
-// 	// Serve the request
-// 	router.ServeHTTP(w, req)
+func TestCreate(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
 
-// 	// Assert the expected response
-// 	assert.Equal(t, http.StatusOK, w.Code)
-// 	assert.JSONEq(t, `{"result":"ok"}`, w.Body.String())
-// }
+	note := notes.Note{
+		Title:   "Test Note",
+		Content: "This is a test note.",
+	}
+
+	mock.ExpectQuery("INSERT INTO notes \\(title, content\\) VALUES \\(\\$1, \\$2\\) RETURNING id").
+		WithArgs(note.Title, note.Content).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
+
+	reqBody, err := json.Marshal(note)
+	assert.NoError(t, err)
+
+	w := httptest.NewRecorder()
+	ctx, engine := gin.CreateTestContext(w)
+	engine.POST("/notes", func(c *gin.Context) {
+		c.Set("db", db)
+		Create(c)
+	})
+	ctx.Set("db", db)
+
+	req := httptest.NewRequest(http.MethodPost, "/notes", bytes.NewBuffer(reqBody))
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var response map[string]interface{}
+	err = json.Unmarshal(w.Body.Bytes(), &response)
+	assert.NoError(t, err)
+	assert.Equal(t, response["result"], "ok")
+
+	// Ensure all expectations were met
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestUpdate(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+
+	note := notes.Note{
+		Title:   "Updated Test Note",
+		Content: "This is an updated test note.",
+	}
+
+	mock.ExpectExec("UPDATE notes SET title = \\$1, content = \\$2 WHERE id = \\$3").
+		WithArgs(note.Title, note.Content, "1").
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	router := gin.New()
+	router.PUT("/notes/:id", func(c *gin.Context) {
+		c.Set("db", db)
+		Update(c)
+	})
+
+	reqBody, _ := json.Marshal(note)
+	req := httptest.NewRequest(http.MethodPut, "/notes/1", bytes.NewBuffer(reqBody))
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var response map[string]interface{}
+	err = json.Unmarshal(w.Body.Bytes(), &response)
+	assert.NoError(t, err)
+	assert.Equal(t, response["result"], "ok")
+
+	// Ensure all expectations were met
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
+}

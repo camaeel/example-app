@@ -1,8 +1,8 @@
 package middleware
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/camaeel/example-app/pkg/database"
 	"log"
 	"time"
 
@@ -26,9 +26,13 @@ func Logger() gin.HandlerFunc {
 	}
 }
 
-func InsertDB() gin.HandlerFunc {
+func InsertDB(setupDB func() (*sql.DB, error)) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		db, err := database.SetupDriver()
+		//TODO: This is bad solution for handling database reloads.
+		//It would be better to change the database for future requests,
+		// but when/how to close the old connection???
+
+		db, err := setupDB()
 		defer db.Close()
 
 		if err != nil {

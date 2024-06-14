@@ -1,12 +1,13 @@
 package config
 
 import (
-	"github.com/spf13/viper"
 	"log"
 	"net/url"
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/spf13/viper"
 )
 
 type RawDatasourceConfig struct {
