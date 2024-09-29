@@ -3,7 +3,8 @@
   "extends": [
     "config:recommended"
   ],
-  "assignees" : [
-    "camaeel"
+  "timezone": "Europe/Warsaw",
+  "schedule": [
+    "0-59 17-21 10,20,30 * *"
   ]
 }
