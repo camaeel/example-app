@@ -11,13 +11,15 @@ import (
 )
 
 type RawDatasourceConfig struct {
-	Jdbc_Url string
-	Username string
-	Password string
+	Jdbc_Url                string
+	Username                string
+	Password                string
+	DelayTerminationSeconds int `yaml:"delayTerminationSeconds"`
 }
 
 type Config struct {
-	DatasourceUrl *url.URL
+	DatasourceUrl           *url.URL
+	DelayTerminationSeconds int
 }
 
 var mutex sync.RWMutex
@@ -68,7 +70,8 @@ func LoadConfig(file *string) {
 	}
 
 	config = &Config{
-		DatasourceUrl: dsUrl,
+		DatasourceUrl:           dsUrl,
+		DelayTerminationSeconds: dsCfg.DelayTerminationSeconds,
 	}
 
 	log.Print("Config loaded")

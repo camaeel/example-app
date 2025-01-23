@@ -15,6 +15,9 @@ build:
 docker:
 	docker buildx build -t example-app:local --load .
 
+run: build
+	GIN_MODE=debug bin/app -configFile config/local.yml
+
 # age password injected into macos keychain:
 # security add-generic-password -a AGE-PUBLIC-KEY -s AGE-PUBLIC-KEY -w CONTENTS
 helm-install:
