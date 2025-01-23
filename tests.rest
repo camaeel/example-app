@@ -2,6 +2,10 @@
 
 GET http://localhost:8080/healthz
 
+### Readiness endpoint
+
+GET http://localhost:8080/readyz
+
 ### List notes
 
 GET http://localhost:8080/notes

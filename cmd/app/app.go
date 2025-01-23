@@ -45,6 +45,7 @@ func main() {
 	r.Use(middleware.InsertDB(database.SetupDriver))
 
 	r.GET("/healthz", health.Healthz)
+	r.GET("/readyz", health.Readyz)
 	r.GET("/notes", notes.List)
 	r.GET("/notes/:id", notes.Get)
 	r.POST("/notes", notes.Create)
