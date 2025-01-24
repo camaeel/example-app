@@ -4,6 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/camaeel/example-app/pkg/config"
 	"github.com/camaeel/example-app/pkg/database"
@@ -45,6 +49,7 @@ func main() {
 	r.Use(middleware.InsertDB(database.SetupDriver))
 
 	r.GET("/healthz", health.Healthz)
+	r.GET("/readyz", health.Readyz)
 	r.GET("/notes", notes.List)
 	r.GET("/notes/:id", notes.Get)
 	r.POST("/notes", notes.Create)
@@ -52,8 +57,18 @@ func main() {
 	r.DELETE("/notes/:id", notes.Delete)
 
 	//start server
-	err = r.Run(fmt.Sprintf(":%d", port))
-	if err != nil {
-		panic(err)
-	}
+	go func() {
+		err = r.Run(fmt.Sprintf(":%d", port))
+		if err != nil {
+			panic(err)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shutting down Server ...")
+
+	log.Printf("Delaying termination by %d seconds\n", config.GetConfig().DelayTerminationSeconds)
+	time.Sleep(time.Duration(config.GetConfig().DelayTerminationSeconds) * time.Second)
 }
