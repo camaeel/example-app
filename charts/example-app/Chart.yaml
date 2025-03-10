@@ -27,7 +27,7 @@ dependencies:
     repository: "oci://registry-1.docker.io/bitnamicharts"
     alias: bitnamipostgres
     condition: bitnamipostgres.enabled
-    version: 16.4.9
+    version: 16.5.0
   - name: cnpgdb
     alias: cnpgdb
     condition: cnpgdb.enabled
