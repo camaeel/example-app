@@ -57,6 +57,19 @@ func Create(db *sql.DB, note Note) error {
 }
 
 func Update(db *sql.DB, id string, note Note) error {
-	_, err := db.Exec("UPDATE notes SET title = $1, content = $2 WHERE id = $3", note.Title, note.Content, id)
-	return err
+	res, err := db.Exec("UPDATE notes SET title = $1, content = $2 WHERE id = $3", note.Title, note.Content, id)
+	if err != nil {
+		return err
+	}
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+	if rowsAffected > 1 {
+		return sql.ErrTxDone
+	}
+	return nil
 }

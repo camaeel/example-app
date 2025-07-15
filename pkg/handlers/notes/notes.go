@@ -93,14 +93,14 @@ func Update(c *gin.Context) {
 	note := notes.Note{}
 
 	if err := c.ShouldBindJSON(&note); err != nil {
-		c.AbortWithError(503, err)
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	err := notes.Update(db, id, note)
 
 	if err != nil {
-		c.AbortWithError(503, err)
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 	c.JSON(200, gin.H{"result": "ok"})

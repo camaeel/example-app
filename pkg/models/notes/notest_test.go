@@ -107,6 +107,27 @@ func TestUpdate(t *testing.T) {
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
+func TestUpdateNothing(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	note := Note{
+		Title:   "Updated Test Note",
+		Content: "This is an updated test note.",
+	}
+
+	mock.ExpectExec("UPDATE notes SET title = \\$1, content = \\$2 WHERE id = \\$3").
+		WithArgs(note.Title, note.Content, "1").
+		WillReturnResult(sqlmock.NewResult(0, 0))
+
+	err = Update(db, "1", note)
+	assert.Error(t, err)
+
+	// Ensure all expectations were met
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
 func TestInitializeTable(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	assert.NoError(t, err)
