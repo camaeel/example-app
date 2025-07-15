@@ -226,3 +226,44 @@ func TestUpdate(t *testing.T) {
 		t.Errorf("there were unfulfilled expectations: %s", err)
 	}
 }
+
+func TestUpdateNoRows(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+
+	note := notes.Note{
+		Title:   "Updated Test Note",
+		Content: "This is an updated test note.",
+	}
+
+	mock.ExpectExec("UPDATE notes SET title = \\$1, content = \\$2 WHERE id = \\$3").
+		WithArgs(note.Title, note.Content, "1").
+		WillReturnResult(sqlmock.NewResult(0, 0))
+
+	router := gin.New()
+	router.PUT("/notes/:id", func(c *gin.Context) {
+		c.Set("db", db)
+		Update(c)
+	})
+
+	reqBody, _ := json.Marshal(note)
+	req := httptest.NewRequest(http.MethodPut, "/notes/1", bytes.NewBuffer(reqBody))
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+
+	// var response map[string]interface{}
+	// err = json.Unmarshal(w.Body.Bytes(), &response)
+	// assert.NoError(t, err)
+	// assert.Equal(t, response["result"], "ok")
+
+	// Ensure all expectations were met
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
+}
