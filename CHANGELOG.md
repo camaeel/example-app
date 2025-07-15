@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.6](https://github.com/camaeel/example-app/compare/v0.5.5...v0.5.6) (2025-07-15)
+
+
+### Bug Fixes
+
+* trigger release ([da18d56](https://github.com/camaeel/example-app/commit/da18d561468fe8f2f5ebe6eb6e327ad9c62da023))
+
 ## [0.5.5](https://github.com/camaeel/example-app/compare/v0.5.4...v0.5.5) (2025-07-15)
 
 
