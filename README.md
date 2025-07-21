@@ -12,6 +12,16 @@ Example go application. This application exposes simple CRUD for making notes an
 2. Update repos: `helm repo update`
 3. Install: `helm upgrade --install --namespace example --create-namespace example-app/example-app`
    
+### Install with local postgres database
+
+**This is not intended for production use (jsut as whole application)**
+
+Adjust values.yaml (.env) as in the coments (replace section for CNPG with section for bitnami) and then install with:
+
+```shell
+helm upgrade --install --namespace example --create-namespace example-app  .  --set bitnamipostgres.enabled=true
+```
+
 ## Local development
 
 ### Local run using docker-compose

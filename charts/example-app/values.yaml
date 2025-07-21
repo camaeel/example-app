@@ -111,11 +111,11 @@ affinity: {}
 
 env:
   # uncomment for bitnamidatabase
-#  - name: DATABASE_URL
-#    valueFrom:
-#      secretKeyRef:
-#        name: "postgres-credentials"
-#        key: DATABASE_URL
+  #- name: DATABASE_URL
+  #  valueFrom:
+  #    secretKeyRef:
+  #      name: "postgres-credentials"
+  #      key: DATABASE_URL
   # uncomment for cnpg db
   - name: DATABASE_URL
     valueFrom:
@@ -123,16 +123,17 @@ env:
         name: example-app-cnpgdb-app
         key: uri
 
-# enables integrated postgres from bitnami chart
 bitnamipostgres:
   enabled: false
   auth:
-    existingSecret: "postgres-credentials"
-    username: example-app
-    database: example
-
-  sslmode: disable
-
+    existingSecret: postgres-credentials
+  image:
+    repository: bitnamisecure/postgresql
+    tag: latest
+  global:
+    security:
+      allowInsecureImages: true
+  sslmode: "disable"
 # enable db managed by cloud native PG operator
 cnpgdb:
   enabled: false
