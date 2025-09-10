@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.7](https://github.com/camaeel/example-app/compare/v0.5.6...v0.5.7) (2025-09-10)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/spf13/viper to v1.21.0 ([#102](https://github.com/camaeel/example-app/issues/102)) ([965ef44](https://github.com/camaeel/example-app/commit/965ef44d9367808a93c83f161a2ff63aed0e1974))
+
 ## [0.5.6](https://github.com/camaeel/example-app/compare/v0.5.5...v0.5.6) (2025-07-15)
 
 
