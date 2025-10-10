@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.7](https://github.com/camaeel/example-app/compare/v0.5.6...v0.5.7) (2025-10-10)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/gin-gonic/gin to v1.11.0 ([#104](https://github.com/camaeel/example-app/issues/104)) ([5b56ede](https://github.com/camaeel/example-app/commit/5b56ede51326afa985b6c1842e7aff9b8d8af2cc))
+* **deps:** update module github.com/spf13/viper to v1.21.0 ([#102](https://github.com/camaeel/example-app/issues/102)) ([965ef44](https://github.com/camaeel/example-app/commit/965ef44d9367808a93c83f161a2ff63aed0e1974))
+
 ## [0.5.6](https://github.com/camaeel/example-app/compare/v0.5.5...v0.5.6) (2025-07-15)
 
 
