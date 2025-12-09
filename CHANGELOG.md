@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.8](https://github.com/camaeel/example-app/compare/v0.5.7...v0.5.8) (2025-12-09)
+
+
+### Bug Fixes
+
+* bump go version ([a519efb](https://github.com/camaeel/example-app/commit/a519efbcebed8a9bff0f3c2eac1d2e919ccf3109))
+* deps ([f94580c](https://github.com/camaeel/example-app/commit/f94580cb0457df672cdd69bb432b681e99a45908))
+* **deps:** bump deps ([3cb973b](https://github.com/camaeel/example-app/commit/3cb973b64c97b2f151155f8f4181cb52473c8fb6))
+
 ## [0.5.7](https://github.com/camaeel/example-app/compare/v0.5.6...v0.5.7) (2025-10-10)
 
 
