@@ -2,6 +2,27 @@ apiVersion: v1
 entries:
   example-app:
   - apiVersion: v2
+    appVersion: v0.5.9
+    created: "2025-12-20T22:24:49.937359853Z"
+    dependencies:
+    - alias: bitnamipostgres
+      condition: bitnamipostgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 18.0.8
+    - alias: cnpgdb
+      condition: cnpgdb.enabled
+      name: cnpgdb
+      repository: https://camaeel.github.io/helm-charts/
+      version: 0.4.0
+    description: Example golang CRUD app
+    digest: 92308f8599184d06ebb68f83d4c27c485e3764399443573c7178043abe8b2a6e
+    name: example-app
+    type: application
+    urls:
+    - https://github.com/camaeel/example-app/releases/download/example-app-0.4.13/example-app-0.4.13.tgz
+    version: 0.4.13
+  - apiVersion: v2
     appVersion: v0.5.8
     created: "2025-12-09T22:12:36.251107879Z"
     dependencies:
@@ -390,4 +411,4 @@ entries:
     urls:
     - https://github.com/camaeel/example-app/releases/download/example-app-0.1.0/example-app-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-09T22:12:36.251263044Z"
+generated: "2025-12-20T22:24:49.937506529Z"
