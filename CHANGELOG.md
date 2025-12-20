@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.9](https://github.com/camaeel/example-app/compare/v0.5.8...v0.5.9) (2025-12-20)
+
+
+### Bug Fixes
+
+* **deps:** github.com/quic-go/quic-go ([2fdd41c](https://github.com/camaeel/example-app/commit/2fdd41cbff0afa624249badf2231f31ca8eb892f))
+
 ## [0.5.8](https://github.com/camaeel/example-app/compare/v0.5.7...v0.5.8) (2025-12-09)
 
 
