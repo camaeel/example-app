@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.10](https://github.com/camaeel/example-app/compare/v0.5.9...v0.5.10) (2026-02-25)
+
+
+### Bug Fixes
+
+* bumop golang ([6306040](https://github.com/camaeel/example-app/commit/63060408aa8b8e4f27a53a0465bb9b5b4b32db25))
+
 ## [0.5.9](https://github.com/camaeel/example-app/compare/v0.5.8...v0.5.9) (2025-12-20)
 
 
