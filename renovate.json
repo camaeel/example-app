@@ -5,6 +5,9 @@
   ],
   "timezone": "Europe/Warsaw",
   "schedule": [
-    "* 17-21 10,20,30 * *"
+    "* 16-20 * * 4"
+  ],
+  "assignees" : [
+    "camaeel"
   ]
 }
