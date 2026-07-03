@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.11](https://github.com/camaeel/example-app/compare/v0.5.10...v0.5.11) (2026-07-03)
+
+
+### Bug Fixes
+
+* deps ([76f6497](https://github.com/camaeel/example-app/commit/76f6497cec87bdd79922dcf71260ed19232b6aa3))
+* remove buildplatfom from target image ([992c3e9](https://github.com/camaeel/example-app/commit/992c3e9c92136dfb5192d94f481f66cfd9a4111a))
+
 ## [0.5.10](https://github.com/camaeel/example-app/compare/v0.5.9...v0.5.10) (2026-02-25)
 
 
