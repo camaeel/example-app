@@ -14,7 +14,7 @@ RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -ldflags="$LDFLAGS"
 
 RUN echo "nonroot:x:1337:1337:nonroot:/nonroot:/usr/sbin/nologin" > /etc_passwd
 
-FROM --platform=$BUILDPLATFORM scratch
+FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/src/app/bin/* /
 COPY --from=builder /etc_passwd /etc/passwd
