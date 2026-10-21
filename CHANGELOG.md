@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.12](https://github.com/camaeel/example-app/compare/v0.5.11...v0.5.12) (2026-10-21)
+
+
+### Bug Fixes
+
+* vulns ([c900869](https://github.com/camaeel/example-app/commit/c90086915b61609c22cd3bc693fea5ae6b717451))
+
 ## [0.5.11](https://github.com/camaeel/example-app/compare/v0.5.10...v0.5.11) (2026-07-03)
 
 
