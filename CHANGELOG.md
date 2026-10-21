@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.13](https://github.com/camaeel/example-app/compare/v0.5.12...v0.5.13) (2026-10-21)
+
+
+### Bug Fixes
+
+* bump image ([95468b6](https://github.com/camaeel/example-app/commit/95468b6fe2186dbe4fbdf386d1a88a515acf0a4f))
+
 ## [0.5.12](https://github.com/camaeel/example-app/compare/v0.5.11...v0.5.12) (2026-10-21)
 
 
